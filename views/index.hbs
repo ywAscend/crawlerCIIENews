@@ -1,0 +1,78 @@
+<style>
+  ul,li{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .content ul li{
+     padding: 10px;
+     width: 30%;
+  }
+  .content ul li:nth-child(1){
+    border: 1px solid rgb(255, 166, 0);
+    background-color: palegoldenrod;
+  }
+  .content ul li:nth-child(2){
+    color: green;
+  }
+  .content ul li:nth-child(3){
+     color: red;
+  }
+  .hide{
+    display: none;
+  }
+
+  .circle_icon{
+      height:50px;
+      line-height: 50px;
+      width:150px;
+      font-size: 14px;
+      position: absolute;
+      top:315px;
+      z-index: 1;
+      left:120px;
+    }
+
+    .circle_icon img{
+      position: relative;
+      top:10px;
+      margin-right: 10px;
+    }
+</style>
+<script src="/javascripts/jquery-3.3.1.min.js"></script>
+<div class='body'>
+
+  <div class='content'>
+    <ul>
+      <li id='news'>获取xx新闻数据</li>
+      <li class="success hide" >数据抓取成功 ^_^！</li>
+      <li class=" failed hide" >数据抓取失败 T_T！</li>
+    </ul>
+  </div>
+<div class="circle_icon hide"><img src="/images/5-121204193R5-50.gif" alt=""/><span>数据加载中...</span></div>
+</div>
+
+
+<script>
+ 
+ $('#news').click(function(){
+    $('.circle_icon').show()
+    $.ajax({
+      method: 'get',
+      url: '/getIncomeNews',
+      data: {
+        urls: 'https://www.ciie.org/zbh/bqgffb/'
+      },
+      success: function(data){
+        $('.circle_icon').hide()
+        if(data && data.length>0){
+          console.log("新闻数据",data)
+          $('.success').show().siblings('.failed').hide()
+        }else{
+          $(".failed").show().siblings('.success').hide()
+        }
+      }
+    })
+ })
+
+</script>
