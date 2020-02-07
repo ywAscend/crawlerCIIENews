@@ -12,4 +12,8 @@ npm start
 
 #fourth step
 点击页面中"获取新闻数据"
-获取成功，可在根目录看到"新闻数据.xlsx"
+![获取新闻数据](https://github.com/ywAscend/ImagesStore/blob/master/README-IMAGE/getNews.png)
+获取成功
+![获取成功](https://github.com/ywAscend/ImagesStore/blob/master/README-IMAGE/getNewsSuccess.png)
+可在根目录看到"新闻数据.xlsx"
+![获取结果](https://github.com/ywAscend/ImagesStore/blob/master/README-IMAGE/getNewsResult.png)
