@@ -8,14 +8,14 @@
      padding: 10px;
      width: 30%;
   }
-  .content ul li:nth-child(1){
+  .content .queryData li:nth-child(1){
     border: 1px solid rgb(255, 166, 0);
     background-color: palegoldenrod;
   }
-  .content ul li:nth-child(2){
+  .content .queryData li:nth-child(2){
     color: green;
   }
-  .content ul li:nth-child(3){
+  .content .queryData li:nth-child(3){
      color: red;
   }
   .hide{
@@ -38,15 +38,36 @@
       top:10px;
       margin-right: 10px;
     }
+    .down{
+      border: 1px solid rgb(255, 166, 0);
+      background-color: palegoldenrod;
+    }
+    .downBox{
+      background-color: #eee;
+    }
+    #news,.down{
+      cursor: pointer;
+    }
 </style>
 <script src="/javascripts/jquery-3.3.1.min.js"></script>
 <div class='body'>
 
   <div class='content'>
-    <ul>
-      <li id='news'>获取xx新闻数据</li>
-      <li class="success hide" >数据抓取成功 ^_^！</li>
+    <ul class="queryData">
+      <li id='news'>展会动态数据查询</li>
+      <li class="success hide" >
+        <div>
+          数据查询成功 ^_^！
+        </div>
+        <div id="dataLength"></div>
+        
+        </li>
       <li class=" failed hide" >数据抓取失败 T_T！</li>
+    </ul>
+    <ul class="downBox hide">
+      <li>start：<input type="number" name="" id="start" ></li>
+      <li>end：<input type="number" name="" id="end" ></li>
+      <li class="down"> 下载 </li>
     </ul>
   </div>
 <div class="circle_icon hide"><img src="/images/5-121204193R5-50.gif" alt=""/><span>数据加载中...</span></div>
@@ -54,25 +75,72 @@
 
 
 <script>
+
+  let DataList = ''
  
  $('#news').click(function(){
     $('.circle_icon').show()
     $.ajax({
       method: 'get',
-      url: '/getIncomeNews',
+      //url: '/getIncomeNews',
+      url: '/getotherNews',
       data: {
-        urls: 'https://www.ciie.org/zbh/bqgffb/'
+       // urls: 'https://www.ciie.org/zbh/bqgffb/'
+        urls: 'https://www.ciie.org/zbh/cn/19news/dynamics/'
       },
       success: function(data){
         $('.circle_icon').hide()
-        if(data && data.length>0){
+        if(data && Array.isArray(data) && data.length>0){
+          DataList = data
           console.log("新闻数据",data)
+          $("#dataLength").text(`共有${data.length}条数据`)
           $('.success').show().siblings('.failed').hide()
+          $(".downBox").show()
+          $("#start").attr('placeholder',`请输入开始条数0-${DataList.length}`)
+          $("#end").attr('placeholder',`请输入结束条数0-${DataList.length}`)
         }else{
           $(".failed").show().siblings('.success').hide()
         }
       }
     })
  })
+
+ //下载
+ $(".down").click(function(){
+   if(!checkRules()){
+     return
+   }
+   $('.circle_icon').show()
+   $.ajax({
+      method: 'get',
+      url: '/getNewsData',
+      data: {
+        startPage: $("#start").val(),  //0-128  第129条数据反爬
+        endPage: $("#end").val() 
+      },
+      success: function(data){
+        $('.circle_icon').hide()
+        
+        if(data && Array.isArray(data) && data.length>0){
+          alert("下载成功！")
+          console.log('下载成功',data)
+
+        }else{
+          alert('下载失败！')
+          console.log('下载失败',data)
+        }
+      }
+    })
+ })
+
+ const checkRules = ()=>{
+   let startPage = $("#start").val() 
+   let endPage = $("#end").val() 
+   if(!startPage || !endPage){
+     alert("请输入查询范围")
+     return false
+   }
+   return true
+  }
 
 </script>

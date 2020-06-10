@@ -21,11 +21,11 @@ function getAllPagesUrl(firstNewsData){
   let $ = cheerio.load(firstNewsData.text)
   let pageList = []
   //总页数
-  let totalPageTxt = $("div#downsidebar .loop-pagination div a")[$("div#downsidebar .loop-pagination div a").length-1]
-  let totalPage = Number($(totalPageTxt).attr('onclick').match(/index_.+?(\d+)/)[0].replace(/[^0-9]/ig,""))
+  let totalPageTxt = $("div#downsidebar .loop-pagination div select option").length
+  let totalPage = totalPageTxt
   for (let i = 2;i<=totalPage;i++){
     let url = {
-      originUrl: encodeURI(`https://www.ciie.org/zbh/bqgffb/index_${i}.html`)
+      originUrl: encodeURI(`https://www.ciie.org/zbh/cn/19news/dynamics/index_${i}.html`)
     }
     pageList.push(url)
   }
@@ -48,6 +48,7 @@ function getDetailsNewsData(detailsNewsList) {
 
 //获取所有页面详细新闻地址
 function getDetailsNewsList(officialNewsList) {
+  //console.log(officialNewsList)
   let _newsUrlList = []
   officialNewsList.forEach((element,index) => {
     let $ = cheerio.load(element.text)
